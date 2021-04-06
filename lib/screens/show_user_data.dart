@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:last_lesson/models/user.dart';
 import 'package:last_lesson/screens/form_screen.dart';
@@ -5,67 +6,93 @@ import 'package:last_lesson/screens/form_screen.dart';
 class ShowUser extends StatelessWidget {
   String username, name, surname, phone;
   ShowUser({this.username, this.name, this.surname, this.phone});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Please edit the user')),
-        body: Container(
-          margin: EdgeInsets.only(left: 30.0, top: 20.0, right: 30.0, bottom: 20.0),
-
-          child: Column(children: [
-      ListTile(
-        title: Text('Username : ' + username),
-      ),
-      ListTile(
-        title: Text('Name : ' + name),
-      ),
-      ListTile(
-        title: Text('Surname : ' + surname),
-      ),
-      ListTile(
-        title: Text('Phone : ' + phone),
-      ),
-      Row(children: <Widget>[
-        Expanded(
-          child: Container(
-            alignment: Alignment.bottomLeft,
-            child: ElevatedButton(
-              child: Text('Back'),
+      appBar: AppBar(
+        title: Text('Please edit the user'),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.delete),
               onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            alignment: Alignment.bottomRight,
-            child: ElevatedButton(
-              child: Text('Edit'),
-              onPressed: () async{
-                User user = User(
-                    username: username,
-                    name: name,
-                    surname: surname,
-                    phone: phone);
-                    User new_user = await Navigator.push(
+                Navigator.pop(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => Create_Form()));
-                    if(new_user.name.length!=0 && new_user.username.length!=0&&new_user.surname.length!=0&&new_user.phone.length!=0){
-                      user.name=new_user.name;
-                      user.surname=new_user.surname;
-                      user.username=new_user.username;
-                      user.phone=new_user.phone;
+                    User(
+                        username: 'delete',
+                        name: 'null',
+                        surname: 'null',
+                        phone: 'null'));
+              }),
+        ],
+      ),
+      body: Column(children: [
+        Expanded(
+
+          child: Column(
+            children:[
+              ListTile(
+              title: Text('Username : ' + username),
+            ),
+        ListTile(
+            title: Text('Name : ' + name),
+          ),
+        ListTile(
+            title: Text('Surname : ' + surname),
+          ),
+         ListTile(
+            title: Text('Phone : ' + phone),
+          ),
+        ])),
+        Expanded(
+
+          child: Row(children:[
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: ElevatedButton(
+                  child: Text('Edit'),
+                  onPressed: () async {
+                    User user = User(
+                        username: username,
+                        name: name,
+                        surname: surname,
+                        phone: phone);
+                    User newUser = await Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Create_Form(username: user.username,name: user.name,surname: user.surname,phone: user.phone,text: "User has been edited successfully",)));
+                    if (newUser.name.length != 0 &&
+                        newUser.username.length != 0 &&
+                        newUser.surname.length != 0 &&
+                        newUser.phone.length != 0) {
+                      user.name = newUser.name;
+                      user.surname = newUser.surname;
+                      user.username = newUser.username;
+                      user.phone = newUser.phone;
                     }
 
-                Navigator.pop(context, user);
-              },
+                    Navigator.pop(context, user);
+                  },
+                ),
+              ),
+            ),
+          Spacer(),
+         Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ElevatedButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
           ),
-        )
-      ]),
-    ])),
+        ]),
+      )]
+      )
+
     );
   }
 }
